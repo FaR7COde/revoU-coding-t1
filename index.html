@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A minimalist life dashboard with to-do list, focus timer, and quick links to help you stay organized and productive every day.">
+  <title>Life Dashboard — Organize Your Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===== Dashboard Container ===== -->
+  <main class="dashboard" id="dashboard">
+
+    <!-- Header: Greeting + Clock + Theme Toggle -->
+    <header class="header">
+      <div class="header-greeting">
+        <h1 id="greeting-title" class="greeting-text">
+          <span id="greeting-prefix">Good Evening</span>,
+          <span class="name-wrapper">
+            <input type="text" id="name-input" class="name-input" placeholder="stranger" maxlength="20" aria-label="Enter your name">
+          </span>
+        </h1>
+        <p id="date-display" class="date-text">Thursday, June 5, 2026</p>
+      </div>
+      <div class="header-right">
+        <div id="clock" class="clock" aria-live="polite">17:41:00</div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark or light mode" title="Toggle Theme">
+          <svg id="theme-icon-moon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="theme-icon-sun" class="theme-icon hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== Main 2-Column Layout ===== -->
+    <div class="layout">
+
+      <!-- LEFT: Task Board -->
+      <section class="card card-tasks" aria-labelledby="tasks-title">
+        <div class="card-header">
+          <h2 id="tasks-title" class="card-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+            Task Board
+          </h2>
+          <div class="card-header-actions">
+            <label for="sort-select" class="sr-only">Sort tasks</label>
+            <select id="sort-select" class="select-minimal" aria-label="Sort tasks">
+              <option value="date-newest">Newest First</option>
+              <option value="priority-highest">Priority ↓</option>
+              <option value="due-date">Due Date</option>
+              <option value="alphabetical">A — Z</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+          <div class="progress-label">
+            <span>Progress</span>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="completed">Done</button>
+        </div>
+
+        <!-- Add Task Form -->
+        <form id="task-form" class="task-form" autocomplete="off">
+          <div class="task-form-main">
+            <input type="text" id="task-input" class="input" placeholder="What needs to be done?" required maxlength="100" aria-label="New task">
+            <button type="submit" class="btn btn-primary" id="add-task-btn">Add</button>
+          </div>
+          <div class="task-form-details">
+            <div class="form-field">
+              <label for="task-priority" class="form-label">Priority</label>
+              <select id="task-priority" class="select-small">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="task-category" class="form-label">Category</label>
+              <select id="task-category" class="select-small">
+                <option value="work">Work</option>
+                <option value="personal" selected>Personal</option>
+                <option value="study">Study</option>
+                <option value="life">Life</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="task-due-date" class="form-label">Due Date</label>
+              <input type="date" id="task-due-date" class="select-small">
+            </div>
+          </div>
+        </form>
+
+        <!-- Task List -->
+        <div id="tasks-container" class="task-list" aria-live="polite">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- RIGHT: Timer + Quick Links -->
+      <div class="sidebar">
+
+        <!-- Focus Timer -->
+        <section class="card card-timer" aria-labelledby="timer-title">
+          <h2 id="timer-title" class="card-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Focus Timer
+          </h2>
+
+          <!-- Timer Mode Tabs -->
+          <div class="timer-tabs">
+            <button class="timer-tab active" data-mode="focus">Focus</button>
+            <button class="timer-tab" data-mode="short-break">Short Break</button>
+            <button class="timer-tab" data-mode="long-break">Long Berak</button>
+          </div>
+
+          <!-- Timer Ring -->
+          <div class="timer-ring-wrapper">
+            <svg class="timer-ring" viewBox="0 0 200 200">
+              <circle class="ring-bg" cx="100" cy="100" r="85" />
+              <circle class="ring-fg" cx="100" cy="100" r="85" />
+            </svg>
+            <div class="timer-center">
+              <div id="timer-display" class="timer-time" aria-live="polite">25:00</div>
+              <div id="timer-label" class="timer-label">Focus</div>
+            </div>
+          </div>
+
+          <!-- Timer Controls -->
+          <div class="timer-controls">
+            <button id="timer-start" class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start
+            </button>
+            <button id="timer-pause" class="btn btn-ghost" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              Pause
+            </button>
+            <button id="timer-reset" class="btn btn-ghost">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              Reset
+            </button>
+          </div>
+
+          <!-- Presets -->
+          <div class="presets">
+            <span class="presets-label">Quick Set</span>
+            <div class="presets-row">
+              <button class="preset" data-minutes="15">15m</button>
+              <button class="preset" data-minutes="25">25m</button>
+              <button class="preset" data-minutes="45">45m</button>
+              <button class="preset" data-minutes="60">60m</button>
+            </div>
+          </div>
+
+          <!-- Session Counter -->
+          <div class="session-counter">
+            <span>Sessions today</span>
+            <span id="session-count" class="session-badge">0</span>
+          </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="card card-links" aria-labelledby="links-title">
+          <h2 id="links-title" class="card-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Quick Links
+          </h2>
+
+          <form id="link-form" class="link-form" autocomplete="off">
+            <input type="text" id="link-name" class="input input-sm" placeholder="Name" required maxlength="20" aria-label="Link name">
+            <input type="text" id="link-url" class="input input-sm" placeholder="URL (e.g. google.com)" required aria-label="Link URL">
+            <button type="submit" class="btn btn-primary btn-sm">Add</button>
+          </form>
+
+          <div id="links-container" class="links-grid" aria-live="polite">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+  <!-- Main Script -->
+  <script src="js/script.js"></script>
+</body>
+</html>
